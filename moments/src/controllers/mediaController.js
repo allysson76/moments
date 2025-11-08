@@ -77,8 +77,8 @@ export async function uploadMidia(req, res) {
             fileSizeBytes: arquivo.size,
             mimeType: arquivo.mimetype,
             metadata: {
-                uploadedFrom: req.headers['user-agent'] || 'unknown'
-            }
+    uploadedFrom: (req.headers['user-agent'] || 'unknown').substring(0, 500)
+}
         };
 
         const resultado = await criarMidia(novaMidia);
