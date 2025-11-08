@@ -115,24 +115,32 @@ export async function uploadMidia(req, res) {
  */
 async function processarImagemComIA(mediaId, caminhoArquivo, userId) {
     try {
+        // Marcar como processando
+        await atualizarMidia(mediaId, userId, {
+            aiStatus: 'processing'
+        });
+
         const imageBuffer = fs.readFileSync(caminhoArquivo);
         const descricao = await gerarDescricaoComGemini(imageBuffer);
-
-        // Extrair tags da descrição (simplificado)
-        const tags = descricao
-            .toLowerCase()
-            .split(/[,.\s]+/)
-            .filter(tag => tag.length > 3)
-            .slice(0, 10); // Limitar a 10 tags
+        const tags = descricao.toLowerCase().split(/[,.\s]+/)
+            .filter(tag => tag.length > 3).slice(0, 10);
 
         await atualizarMidia(mediaId, userId, {
             'metadata.aiDescription': descricao,
-            aiTags: tags
+            aiTags: tags,
+            aiStatus: 'completed',
+            aiProcessedAt: new Date()
         });
 
         console.log(`✅ IA processada para mídia ${mediaId}`);
     } catch (erro) {
         console.error("Erro ao processar IA:", erro);
+        
+        // Marcar como falha
+        await atualizarMidia(mediaId, userId, {
+            aiStatus: 'failed',
+            'metadata.aiError': erro.message
+        });
     }
 }
 
