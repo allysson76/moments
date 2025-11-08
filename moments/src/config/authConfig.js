@@ -2,7 +2,20 @@ import 'dotenv/config';
 
 export const authConfig = {
     // Chave secreta para assinar tokens JWT (NUNCA commitar isso!)
-    jwtSecret: process.env.JWT_SECRET || 'sua-chave-secreta-super-segura-aqui',
+
+    jwtSecret: (() => {
+        if (!process.env.JWT_SECRET) {
+            console.error('❌ ERRO CRÍTICO: JWT_SECRET não definido no .env');
+            console.error('A aplicação NÃO PODE iniciar sem esta variável.');
+            process.exit(1);
+        }
+        if (process.env.JWT_SECRET.length < 32) {
+            console.error('❌ ERRO: JWT_SECRET muito curto (mínimo 32 caracteres)');
+            process.exit(1);
+        }
+        return process.env.JWT_SECRET;
+
+    })(),
 
     // Tempo de expiração do token (24 horas)
     jwtExpiresIn: '24h',
