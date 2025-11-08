@@ -38,6 +38,8 @@ export async function listarMidias(req, res) {
  * POST /media/upload
  */
 export async function uploadMidia(req, res) {
+    let caminhoArquivo = null;
+
     try {
         if (!req.file) {
             return res.status(400).json({
@@ -46,6 +48,7 @@ export async function uploadMidia(req, res) {
         }
 
         const arquivo = req.file;
+        caminhoArquivo = arquivo.path;
 
         // Determinar tipo de mídia
         const tiposMidia = {
@@ -85,6 +88,9 @@ export async function uploadMidia(req, res) {
 
         const resultado = await criarMidia(novaMidia);
 
+        // Se chegou aqui, sucesso
+        caminhoArquivo = null; // Não deletar em caso de sucesso
+
         // Se for imagem, processar com IA (assíncrono)
         if (mediaType === 'image') {
             processarImagemComIA(resultado.insertedId, arquivo.path, req.user.id)
@@ -102,6 +108,12 @@ export async function uploadMidia(req, res) {
         });
 
     } catch (erro) {
+        // ✅ Limpar arquivo em caso de erro
+        if (caminhoArquivo && fs.existsSync(caminhoArquivo)) {
+            fs.unlinkSync(caminhoArquivo);
+            console.log(`🗑️ Arquivo removido após erro: ${caminhoArquivo}`);
+        }
+        
         console.error("Erro ao fazer upload:", erro);
         res.status(500).json({
             erro: "Falha no upload"
