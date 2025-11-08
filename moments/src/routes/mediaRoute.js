@@ -7,7 +7,7 @@ import {
     obterMidia,
     excluirMidia,
     buscarMidias
-} from "./src/controllers/mediaController.js";
+} from "../controllers/mediaController.js";
 import { verificarAutenticacao } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
