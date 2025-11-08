@@ -72,13 +72,10 @@ export async function criarMidia(dadosMidia) {
  * Buscar mídia por ID (com verificação de propriedade)
  */
 export async function buscarMidiaPorId(mediaId, userId) {
-    const db = connection.db("moments_db");
-    const collection = db.collection("media");
-
     try {
         return await collection.findOne({
             _id: new ObjectId(mediaId),
-            userId: userId // SEGURANÇA: Garantir que pertence ao usuário
+            userId: userId.toString() // Explícito
         });
     } catch (erro) {
         console.error("ID de mídia inválido:", erro);
