@@ -78,7 +78,9 @@ export async function uploadMidia(req, res) {
             mimeType: arquivo.mimetype,
             metadata: {
     uploadedFrom: (req.headers['user-agent'] || 'unknown').substring(0, 500)
-}
+},
+            aiStatus: 'pending', // 'pending' | 'processing' | 'completed' | 'failed',
+            aiProcessedAt: null
         };
 
         const resultado = await criarMidia(novaMidia);
