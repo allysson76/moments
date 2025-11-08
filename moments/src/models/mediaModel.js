@@ -123,6 +123,11 @@ export async function deletarMidia(mediaId, userId) {
 /**
  * Buscar mídias por tags (busca inteligente)
  */
+// Escapar caracteres especiais de regex
+function escaparRegex(texto) {
+    return texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 export async function buscarMidiasPorTags(userId, tags, opcoes = {}) {
     const db = connection.db("moments_db");
     const collection = db.collection("media");
@@ -130,11 +135,22 @@ export async function buscarMidiasPorTags(userId, tags, opcoes = {}) {
     const { limite = 50, pagina = 1 } = opcoes;
     const skip = (pagina - 1) * limite;
 
-    // Busca case-insensitive em aiTags
+    // ✅ Validar e sanitizar tags
+    const tagsSeguras = tags
+        .filter(tag => typeof tag === 'string' && tag.length > 0 && tag.length < 50)
+        .map(tag => escaparRegex(tag.trim()));
+
+    if (tagsSeguras.length === 0) {
+        return {
+            midias: [],
+            paginacao: { total: 0, pagina, limite, totalPaginas: 0 }
+        };
+    }
+
     const filtro = {
         userId,
         aiTags: {
-            $in: tags.map(tag => new RegExp(tag, 'i'))
+            $in: tagsSeguras.map(tag => new RegExp(tag, 'i'))
         }
     };
 
