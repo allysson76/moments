@@ -196,7 +196,7 @@ export async function excluirMidia(req, res) {
  * Buscar mídias (busca inteligente)
  * GET /media/search?q=praia,cachorro
  */
-export async function buscarMidias(req, res) {
+export async function buscarMidiasPorQuery(req, res) {
     try {
         const { q, pagina, limite } = req.query;
 
