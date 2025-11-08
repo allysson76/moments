@@ -6,7 +6,7 @@ import {
     uploadMidia,
     obterMidia,
     excluirMidia,
-    buscarMidias
+    buscarMidiasPorQuery
 } from "../controllers/mediaController.js";
 import { verificarAutenticacao } from "../middleware/authMiddleware.js";
 
@@ -56,7 +56,7 @@ router.use(verificarAutenticacao);
 router.get("/", listarMidias);
 
 // GET /media/search - Busca inteligente
-router.get("/search", buscarMidias);
+router.get("/search", buscarMidiasPorQuery);
 
 // GET /media/:id - Obter mídia específica
 router.get("/:id", obterMidia);
