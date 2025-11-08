@@ -1,5 +1,6 @@
 // server.js
 import express from "express";
+import rateLimit from 'express-rate-limit';
 import cors from "cors";
 import authRoutes from "./src/routes/authRoute.js";
 import mediaRoutes from "./src/routes/mediaRoutes.js"; // NOVO
