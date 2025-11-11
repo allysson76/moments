@@ -67,7 +67,7 @@ Crie um arquivo `.env` na raiz do projeto:
 ```env
 # MongoDB
 STRING_CONECTION=mongodb+srv://usuario:senha@cluster.mongodb.net/moments_db
-
+DB_NAME=moments_db
 # JWT
 JWT_SECRET=sua-chave-secreta-super-segura
 
@@ -107,18 +107,15 @@ moments/
 │   │   └── dbConfig.js
 │   ├── controllers/     # Lógica de negócio
 │   │   ├── authController.js
-│   │   ├── mediaController.js
-│   │   └── postsController.js
+│   │   └── mediaController.js
 │   ├── middleware/      # Middlewares
 │   │   └── authMiddleware.js
 │   ├── models/          # Modelos de dados
 │   │   ├── userModel.js
-│   │   ├── mediaModel.js
-│   │   └── postsModel.js
+│   │   └── mediaModel.js
 │   ├── routes/          # Rotas da API
 │   │   ├── authRoute.js
-│   │   ├── mediaRoute.js
-│   │   └── postsRoute.js
+│   │   └── mediaRoute.js
 │   ├── services/        # Serviços externos
 │   │   └── geminiService.js
 │   ├── scripts/         # Scripts utilitários
